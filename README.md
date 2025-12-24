@@ -1,38 +1,41 @@
 # scTenifoldKnk
 
-Optimized version of scTenifoldKnk for in-silico gene knockout experiments using single-cell RNA-seq data.
+A workflow for in-silico gene knockout experiments using single-cell RNA-seq data.
 
-## What's New in Version 2.0.0
+## Version 2.0.0
 
 **Maintainer**: Zaoqu Liu (liuzaoqu@163.com)  
 **Repository**: https://github.com/Zaoqu-Liu/scTenifoldKnk
 
-### Key Improvements
+### Updates in This Version
 
-- **3-4x Performance Boost**: For typical datasets (500-1000 genes)
-  - 500 genes: 2.2 min → 0.6 min (4x faster)
-  - 1000 genes: 8.6 min → 2.5 min (3.5x faster)
+This version includes performance optimizations while maintaining compatibility with the original implementation.
+
+- **Performance improvements** for medium to large datasets:
+  - 500 genes: ~4x faster (benchmarked: 133s → 34s)
+  - 1000 genes: ~3.5x faster (benchmarked: 517s → 150s)
+  - Note: Small datasets (<200 genes) show minimal speedup due to parallelization overhead
   
-- **Perfect Accuracy**: Correlation > 0.999 with original implementation
+- **Result consistency**: High correlation (>0.999) with original version on test datasets
 
-- **Smart Parallelization**: Automatically adapts to dataset size
-  - Small datasets (<200 genes): Sequential processing to avoid overhead
-  - Large datasets (>200 genes): Multi-core parallel processing
-  
-- **Optimized Algorithms**:
-  - Efficient matrix operations
-  - Vectorized computations
-  - Memory-optimized sparse matrix handling
+- **Adaptive parallelization**: Automatically selects sequential or parallel mode based on data size
 
-### Performance Comparison
+- **Implementation changes**:
+  - Optimized matrix operations
+  - Vectorized computations where possible
+  - Multi-core processing for network construction
 
-| Data Size | Original | Optimized (v2.0) | Speedup | Accuracy |
-|-----------|----------|------------------|---------|----------|
+### Benchmark Results
+
+Results from tests on Apple Silicon (M-series, 10 cores) using synthetic data:
+
+| Data Size | v1.0.1 | v2.0.0 | Speedup | Correlation |
+|-----------|--------|--------|---------|-------------|
 | 100 genes × 3000 cells | 4.4s | 2.9s | 1.5x | 0.9999 |
-| 500 genes × 2000 cells | 133s | 34s | **4.0x** | 1.0000 |
-| 1000 genes × 2500 cells | 517s | 150s | **3.5x** | 1.0000 |
+| 500 genes × 2000 cells | 133s | 34s | 4.0x | 1.0000 |
+| 1000 genes × 2500 cells | 517s | 150s | 3.5x | 1.0000 |
 
-Tested on Apple Silicon (M-series) with 10 cores.
+*Note: Performance may vary depending on hardware, data characteristics, and system load.*
 
 ## Installation
 
@@ -143,15 +146,23 @@ Returns a list with three components:
 ## Requirements
 
 - R ≥ 3.6
-- Dependencies: Matrix, RSpectra, MASS, parallel
+- Dependencies: Matrix, RSpectra, MASS, parallel, Rcpp, RcppEigen
+- C++ compiler for building from source
+
+## Limitations
+
+- Performance improvements are most noticeable for datasets with >500 genes
+- Very small datasets may not benefit from parallelization
+- Results may differ slightly from v1.0.1 due to different random subsampling (use same seed for reproducibility)
 
 ## Citation
 
 **Original Method**:  
 Osorio D, et al. scTenifoldKnk: An Efficient Virtual Knockout Tool for Gene Function Prediction via Single-Cell Gene Regulatory Network Perturbation. Patterns. 2020.
 
-**Optimized Version**:  
-Liu Z. Performance Optimization of scTenifoldKnk. GitHub: https://github.com/Zaoqu-Liu/scTenifoldKnk, 2024.
+**This Version**:  
+If you use this optimized version, please also cite:  
+Liu Z. scTenifoldKnk v2.0.0 with performance improvements. GitHub: https://github.com/Zaoqu-Liu/scTenifoldKnk, 2024.
 
 ## License
 
@@ -161,7 +172,7 @@ GPL (≥ 2)
 
 **Original Authors**: Daniel Osorio, James Cai, and contributors from Texas A&M University
 
-**Optimization**: Zaoqu Liu (ORCID: 0000-0002-0452-742X)
+**Performance improvements**: Zaoqu Liu (ORCID: 0000-0002-0452-742X)
 
 ## Links
 
