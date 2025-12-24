@@ -1,0 +1,10 @@
+1b2d3e02e584a398bdaa62e2b455928c *DESCRIPTION
+c3b212ad7ed3c6c4cfed5a75335262ea *NAMESPACE
+e6b49e431d7a06dcc84c01c6a897842b *R/dRegulation.R
+cdf7da96d6d5e690f9f522a79126fd47 *R/qFilter.R
+2691633b71117276c96a2fccd5ce8943 *R/scQC.R
+95abd6032ade06db965c082d06402480 *R/scTenifoldKnk.R
+cb718dea000d7b136c173f36c27f73d3 *R/strictDirection.R
+10f8a0b90d45ede0dca5a1a1622d4898 *README.md
+2ece3c4445022f084ce9715fc6f35ac6 *inst/single-cell/example.csv
+2ac988f9fb2bd38e1f3ecc8f7dc93e32 *man/scTenifoldKnk.Rd

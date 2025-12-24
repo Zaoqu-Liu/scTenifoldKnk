@@ -1,0 +1,24 @@
+# Compiled Object files
+*.o
+*.so
+*.dll
+
+# R build artifacts
+*.tar.gz
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary files
+*~
+*.swp
+*.swo
+
