@@ -6,16 +6,100 @@
 
 using namespace Rcpp;
 
-// Placeholder - future optimizations can be added here
-// For now, the R implementation is sufficient
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
 
-// Rcpp init
-RcppExport SEXP _rcpp_module_boot_stub() {
-    return R_NilValue;
+// strictDirectionCpp
+Eigen::SparseMatrix<double> strictDirectionCpp(SEXP XSEXP, double lambda);
+RcppExport SEXP _scTenifoldKnk_strictDirectionCpp(SEXP XSEXPSEXP, SEXP lambdaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type XSEXP(XSEXPSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    rcpp_result_gen = Rcpp::wrap(strictDirectionCpp(XSEXP, lambda));
+    return rcpp_result_gen;
+END_RCPP
+}
+// knockoutGeneCpp
+Eigen::SparseMatrix<double> knockoutGeneCpp(SEXP networkSEXP, int geneIdx);
+RcppExport SEXP _scTenifoldKnk_knockoutGeneCpp(SEXP networkSEXPSEXP, SEXP geneIdxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type networkSEXP(networkSEXPSEXP);
+    Rcpp::traits::input_parameter< int >::type geneIdx(geneIdxSEXP);
+    rcpp_result_gen = Rcpp::wrap(knockoutGeneCpp(networkSEXP, geneIdx));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sparseToDenseTranspose
+Eigen::MatrixXd sparseToDenseTranspose(SEXP XSEXP);
+RcppExport SEXP _scTenifoldKnk_sparseToDenseTranspose(SEXP XSEXPSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type XSEXP(XSEXPSEXP);
+    rcpp_result_gen = Rcpp::wrap(sparseToDenseTranspose(XSEXP));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dRegulationCpp
+DataFrame dRegulationCpp(SEXP manifoldOutputSEXP, const std::vector<std::string>& geneNames, const std::string& gKO);
+RcppExport SEXP _scTenifoldKnk_dRegulationCpp(SEXP manifoldOutputSEXPSEXP, SEXP geneNamesSEXP, SEXP gKOSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type manifoldOutputSEXP(manifoldOutputSEXPSEXP);
+    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type geneNames(geneNamesSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type gKO(gKOSEXP);
+    rcpp_result_gen = Rcpp::wrap(dRegulationCpp(manifoldOutputSEXP, geneNames, gKO));
+    return rcpp_result_gen;
+END_RCPP
+}
+// makeNetworksCpp
+List makeNetworksCpp(SEXP countMatrixSEXP, int nNet, int nCells, int nComp, double q, bool scaleScores, bool symmetric, int nThreads);
+RcppExport SEXP _scTenifoldKnk_makeNetworksCpp(SEXP countMatrixSEXPSEXP, SEXP nNetSEXP, SEXP nCellsSEXP, SEXP nCompSEXP, SEXP qSEXP, SEXP scaleScoresSEXP, SEXP symmetricSEXP, SEXP nThreadsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type countMatrixSEXP(countMatrixSEXPSEXP);
+    Rcpp::traits::input_parameter< int >::type nNet(nNetSEXP);
+    Rcpp::traits::input_parameter< int >::type nCells(nCellsSEXP);
+    Rcpp::traits::input_parameter< int >::type nComp(nCompSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    Rcpp::traits::input_parameter< bool >::type scaleScores(scaleScoresSEXP);
+    Rcpp::traits::input_parameter< bool >::type symmetric(symmetricSEXP);
+    Rcpp::traits::input_parameter< int >::type nThreads(nThreadsSEXP);
+    rcpp_result_gen = Rcpp::wrap(makeNetworksCpp(countMatrixSEXP, nNet, nCells, nComp, q, scaleScores, symmetric, nThreads));
+    return rcpp_result_gen;
+END_RCPP
+}
+// tensorDecompositionCpp
+List tensorDecompositionCpp(const List& networkList, int K, int maxIter, double maxError, int nDecimal);
+RcppExport SEXP _scTenifoldKnk_tensorDecompositionCpp(SEXP networkListSEXP, SEXP KSEXP, SEXP maxIterSEXP, SEXP maxErrorSEXP, SEXP nDecimalSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type networkList(networkListSEXP);
+    Rcpp::traits::input_parameter< int >::type K(KSEXP);
+    Rcpp::traits::input_parameter< int >::type maxIter(maxIterSEXP);
+    Rcpp::traits::input_parameter< double >::type maxError(maxErrorSEXP);
+    Rcpp::traits::input_parameter< int >::type nDecimal(nDecimalSEXP);
+    rcpp_result_gen = Rcpp::wrap(tensorDecompositionCpp(networkList, K, maxIter, maxError, nDecimal));
+    return rcpp_result_gen;
+END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rcpp_module_boot_stub", (DL_FUNC) &_rcpp_module_boot_stub, 0},
+    {"_scTenifoldKnk_strictDirectionCpp", (DL_FUNC) &_scTenifoldKnk_strictDirectionCpp, 2},
+    {"_scTenifoldKnk_knockoutGeneCpp", (DL_FUNC) &_scTenifoldKnk_knockoutGeneCpp, 2},
+    {"_scTenifoldKnk_sparseToDenseTranspose", (DL_FUNC) &_scTenifoldKnk_sparseToDenseTranspose, 1},
+    {"_scTenifoldKnk_dRegulationCpp", (DL_FUNC) &_scTenifoldKnk_dRegulationCpp, 3},
+    {"_scTenifoldKnk_makeNetworksCpp", (DL_FUNC) &_scTenifoldKnk_makeNetworksCpp, 8},
+    {"_scTenifoldKnk_tensorDecompositionCpp", (DL_FUNC) &_scTenifoldKnk_tensorDecompositionCpp, 5},
     {NULL, NULL, 0}
 };
 

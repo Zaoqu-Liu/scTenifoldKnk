@@ -5,60 +5,59 @@
 #' @param manifoldOutput Manifold alignment output
 #' @param gKO Knocked out gene name
 #' @return Data frame with differential regulation results
-dRegulation <- function(manifoldOutput, gKO){
-  
+dRegulation <- function(manifoldOutput, gKO) {
   geneList <- rownames(manifoldOutput)
-  geneList <- geneList[grepl('^X_', geneList)]
-  geneList <- gsub('^X_','', geneList)
+  geneList <- geneList[grepl("^X_", geneList)]
+  geneList <- gsub("^X_", "", geneList)
   nGenes <- length(geneList)
-  
-  eGenes <- nrow(manifoldOutput)/2
-  
+
+  eGenes <- nrow(manifoldOutput) / 2
+
   eGeneList <- rownames(manifoldOutput)
-  eGeneList <- eGeneList[grepl('^Y_', eGeneList)]
-  eGeneList <- gsub('^Y_','', eGeneList)
-  
-  if(nGenes != eGenes){
-    stop('Number of identified and expected genes are not the same')
+  eGeneList <- eGeneList[grepl("^Y_", eGeneList)]
+  eGeneList <- gsub("^Y_", "", eGeneList)
+
+  if (nGenes != eGenes) {
+    stop("Number of identified and expected genes are not the same")
   }
-  if(!all(eGeneList == geneList)){
-    stop('Genes are not ordered as expected. X_ genes should be followed by Y_ genes in the same order')
+  if (!all(eGeneList == geneList)) {
+    stop("Genes are not ordered as expected. X_ genes should be followed by Y_ genes in the same order")
   }
-  
+
   # Vectorized distance computation
-  dMetric <- sqrt(rowSums((manifoldOutput[1:nGenes, ] - manifoldOutput[(nGenes+1):(2*nGenes), ])^2))
-  
+  dMetric <- sqrt(rowSums((manifoldOutput[1:nGenes, ] - manifoldOutput[(nGenes + 1):(2 * nGenes), ])^2))
+
   # Box-Cox transformation
   lambdaValues <- seq(-2, 2, length.out = 1000)
   lambdaValues <- lambdaValues[lambdaValues != 0]
   BC <- MASS::boxcox(dMetric ~ 1, plot = FALSE, lambda = lambdaValues)
   BC <- BC$x[which.max(BC$y)]
-  
-  if(BC < 0){
-    nD <- 1 / (dMetric ^ BC)
+
+  if (BC < 0) {
+    nD <- 1 / (dMetric^BC)
   } else {
-    nD <- dMetric ^ BC
+    nD <- dMetric^BC
   }
-  
+
   Z <- scale(nD)
-  
+
   dOut <- data.frame(
-    gene = geneList, 
+    gene = geneList,
     distance = dMetric,
     Z = as.vector(Z),
     stringsAsFactors = FALSE
   )
-  
+
   dOut <- dOut[order(dOut$distance, decreasing = TRUE), ]
-  
+
   # Compute fold change and p-values
   FC <- (dOut$distance^2) / mean((dOut$distance[-seq_len(length(gKO))]^2))
   pValues <- pchisq(q = FC, df = 1, lower.tail = FALSE)
-  pAdjusted <- p.adjust(pValues, method = 'fdr')
-  
+  pAdjusted <- p.adjust(pValues, method = "fdr")
+
   dOut$FC <- FC
   dOut$p.value <- pValues
   dOut$p.adj <- pAdjusted
-  
+
   return(dOut)
 }

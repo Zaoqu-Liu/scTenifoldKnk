@@ -2,7 +2,7 @@
 % Please edit documentation in R/scTenifoldKnk.R
 \name{scTenifoldKnk}
 \alias{scTenifoldKnk}
-\title{scTenifoldKNK - C++ Accelerated Version}
+\title{Optimized Virtual Knockout Experiment}
 \usage{
 scTenifoldKnk(
   countMatrix,
@@ -21,70 +21,58 @@ scTenifoldKnk(
   td_maxError = 1e-05,
   td_nDecimal = 3,
   ma_nDim = 2,
-  nThreads = 0,
-  use_cpp = TRUE
+  nCores = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
-\item{countMatrix}{A numeric matrix with genes in rows and cells in columns. Data should NOT be normalized.}
+\item{countMatrix}{Gene expression count matrix (genes x cells)}
 
-\item{gKO}{Character string. Name of the gene to knockout.}
+\item{gKO}{Gene(s) to knockout}
 
-\item{qc_mtThreshold}{A decimal value between 0 and 1. Defines the maximum ratio of mitochondrial reads (mithocondrial reads / library size) present in a cell to be included in the analysis. It's computed using the symbol genes starting with 'MT-' non-case sensitive.}
+\item{qc_mtThreshold}{Maximum mitochondrial read ratio}
 
-\item{qc_minLSize}{An integer value. Defines the minimum library size required for a cell to be included in the analysis.}
+\item{qc_minLSize}{Minimum library size}
 
-\item{nc_lambda}{A continuous value between 0 and 1. Defines the multiplicative value (1-lambda) to be applied over the weaker edge connecting two genes to maximize the adjacency matrix directionality.}
+\item{nc_lambda}{Lambda parameter for strict directionality}
 
-\item{nc_nNet}{An integer value. The number of networks based on principal components regression to generate.}
+\item{nc_nNet}{Number of networks to generate}
 
-\item{nc_nCells}{An integer value. The number of cells to subsample each time to generate a network.}
+\item{nc_nCells}{Number of cells per network}
 
-\item{nc_nComp}{An integer value. The number of principal components in PCA to generate the networks. Should be greater than 2 and lower than the total number of genes.}
+\item{nc_nComp}{Number of principal components}
 
-\item{nc_scaleScores}{A boolean value (TRUE/FALSE), if TRUE, the weights will be normalized such that the maximum absolute value is 1.}
+\item{nc_scaleScores}{Whether to scale network scores}
 
-\item{nc_symmetric}{A boolean value (TRUE/FALSE), if TRUE, the weights matrix returned will be symmetric.}
+\item{nc_symmetric}{Whether to make network symmetric}
 
-\item{nc_q}{A decimal value between 0 and 1. Defines the cut-off threshold of top q\% relationships to be returned.}
+\item{nc_q}{Quantile threshold for edge filtering}
 
-\item{td_K}{An integer value. Defines the number of rank-one tensors used to approximate the data using CANDECOMP/PARAFAC (CP) Tensor Decomposition.}
+\item{td_K}{Number of tensor components}
 
-\item{td_maxIter}{An integer value. Defines the maximum number of iterations if error stay above \code{td_maxError}.}
+\item{td_maxIter}{Maximum tensor decomposition iterations}
 
-\item{td_maxError}{A decimal value between 0 and 1. Defines the relative Frobenius norm error tolerance.}
+\item{td_maxError}{Tensor decomposition error tolerance}
 
-\item{td_nDecimal}{An integer value indicating the number of decimal places to be used.}
+\item{td_nDecimal}{Number of decimal places}
 
-\item{ma_nDim}{An integer value. Defines the number of dimensions of the low-dimensional feature space to be returned from the non-linear manifold alignment.}
+\item{ma_nDim}{Number of manifold dimensions}
 
-\item{nThreads}{An integer value. Number of threads for parallel computation (0 = auto-detect).}
+\item{nCores}{Number of cores for parallel processing}
 
-\item{use_cpp}{Logical. If TRUE (default), use C++ accelerated functions. Set to FALSE for original R implementation.}
+\item{verbose}{Whether to print progress information}
 }
 \value{
-A list with three elements:
-  \itemize{
-    \item tensorNetworks: List with WT and KO networks
-    \item manifoldAlignment: Matrix with low-dimensional embeddings
-    \item diffRegulation: DataFrame with differential regulation statistics
-  }
+A list containing tensor networks, manifold alignment, and differential regulation results
 }
 \description{
-Predict gene perturbations using virtual knockout experiments on single-cell gene regulatory networks.
-  This version uses C++ acceleration for 50-100x speedup.
+Performs in-silico gene knockout experiments using optimized algorithms
 }
 \examples{
 # Loading single-cell data
-scRNAseq <- system.file("single-cell/example.csv",package="scTenifoldKnk")
+scRNAseq <- system.file("single-cell/example.csv", package = "scTenifoldKnk")
 scRNAseq <- read.csv(scRNAseq, row.names = 1)
 
-# Running scTenifoldKnk (C++ accelerated)
-result <- scTenifoldKnk(countMatrix = scRNAseq, gKO = 'G100', qc_minLSize = 0)
-
-# Access results
-head(result$diffRegulation)
-}
-\author{
-Daniel Osorio <dcosorioh@tamu.edu>
+# Running scTenifoldKnk
+result <- scTenifoldKnk(countMatrix = scRNAseq, gKO = "G100", qc_minLSize = 0)
 }
